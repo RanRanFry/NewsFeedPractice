@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 public class User {
 
+    //DB가 자동으로 PK 값을 생성해주는 전략
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -51,6 +52,14 @@ public class User {
 
     public String getNickname() {
         return nickname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }
 
