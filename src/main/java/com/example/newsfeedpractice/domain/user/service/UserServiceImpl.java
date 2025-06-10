@@ -18,8 +18,22 @@ public class UserServiceImpl implements UserService {
     private final UserRepostiory userRepository;
 
 
+    public boolean isVaild(String email){
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+        return email.matches(emailRegex);
+    }
+
     @Override
     public UserCreateResponseDto createUserAccount(UserCreateRequestDto requestDto) {
+
+
+        String email= requestDto.getEmail();
+        if (!isVaild(email)){
+            throw new IllegalArgumentException("Invaild email address format");
+        }
+
+
 
         User user = User.builder()
                         .userName(requestDto.getUserName())
