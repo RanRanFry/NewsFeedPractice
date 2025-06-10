@@ -1,7 +1,9 @@
 package com.example.newsfeedpractice.domain.user.service;
 
-import com.example.newsfeedpractice.domain.user.dto.UserAccountRequestDto;
+import com.example.newsfeedpractice.domain.user.dto.UserCreateRequestDto;
 import com.example.newsfeedpractice.domain.user.dto.UserCreateResponseDto;
+import com.example.newsfeedpractice.domain.user.dto.UserLoginRequestDto;
+import com.example.newsfeedpractice.domain.user.dto.UserLoginResponseDto;
 import com.example.newsfeedpractice.domain.user.entity.User;
 import com.example.newsfeedpractice.domain.user.repository.UserRepostiory;
 import lombok.Builder;
@@ -17,7 +19,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserCreateResponseDto createUserAccount(UserAccountRequestDto requestDto) {
+    public UserCreateResponseDto createUserAccount(UserCreateRequestDto requestDto) {
 
         User user = User.builder()
                         .userName(requestDto.getUserName())
@@ -33,6 +35,19 @@ public class UserServiceImpl implements UserService {
 
         return new UserCreateResponseDto(newUser.getId(), newUser.getEmail(), newUser.getPassword(), newUser.getNickname());
 
+    }
+
+    @Override
+    public UserLoginResponseDto userLogin(UserLoginRequestDto logintRequest) {
+
+        User user = userRepository.findByEmail(logintRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException("없는 회원입니다."));
+
+        if (!user.getPassword().equals(logintRequest.getPassword())){
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return new UserLoginResponseDto(user.getId(), user.getEmail(), user.getNickname() );
     }
 
 
