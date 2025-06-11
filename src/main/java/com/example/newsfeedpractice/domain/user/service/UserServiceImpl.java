@@ -87,5 +87,15 @@ public class UserServiceImpl implements UserService {
         return new ProfileResponseDto(user.getNickname(), user.getProfileUrl());
     }
 
+    @Override
+    public MyProfileResponseDto getMyProfile(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("조회되지 않는 회원입니다."));
+
+        MyProfileResponseDto myProfileResponseDto = new MyProfileResponseDto(user);
+        return myProfileResponseDto;
+
+    }
+
 
 }

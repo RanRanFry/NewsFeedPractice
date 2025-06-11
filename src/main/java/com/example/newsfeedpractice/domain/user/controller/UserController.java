@@ -2,10 +2,14 @@ package com.example.newsfeedpractice.domain.user.controller;
 
 import com.example.newsfeedpractice.domain.user.dto.*;
 import com.example.newsfeedpractice.domain.user.service.UserService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+
 
 @RequiredArgsConstructor //final 등의 필수 인자의 생성자를 자동 만들어주기
 @RestController
@@ -37,12 +41,25 @@ public class UserController {
      * 유저 프로필 조회(타인)
      * 민감 정보 표시 제한
      * 민감 정보가 아닌 것  : 닉네임, 프로필 URL
-     * ToDo : 프로필 조회
+     *
      */
     @GetMapping("/{id}")
     public ResponseEntity <ProfileResponseDto>getProfile(@PathVariable Long id){
         ProfileResponseDto profile = userService.getProfile(id);
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
+
+    @GetMapping("/myProfile")
+    public ResponseEntity <MyProfileResponseDto> getMyProfile(@AuthenticationPrincipal Long id){
+
+        MyProfileResponseDto myProfile = userService.getMyProfile(id);
+        return new ResponseEntity<>(myProfile, HttpStatus.OK);
+    }
+
+    /**
+     * 수정
+     */
+    @PatchMapping("/myProfile")
+
 
 }
