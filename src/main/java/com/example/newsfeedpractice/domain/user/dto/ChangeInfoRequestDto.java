@@ -8,4 +8,5 @@ public class ChangeInfoRequestDto {
     private String password;
     private String profileUrl;
     private String phoneNumber;
+    private String verifyPassword;
 }

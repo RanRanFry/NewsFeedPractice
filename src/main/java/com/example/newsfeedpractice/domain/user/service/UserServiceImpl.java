@@ -156,6 +156,11 @@ public class UserServiceImpl implements UserService {
         String newPhoneNumber = changeRequest.getPhoneNumber();
 
         if (newPassword != null && !newPassword.isBlank() ){
+
+            if(!user.getPassword().equals(changeRequest.getVerifyPassword())){
+                throw new IllegalArgumentException("틀린 비밀번호입니다. 다시 입력해주세요. ");
+            }
+
             if(user.getPassword().equals(changeRequest.getPassword())){
                 throw new IllegalArgumentException("동일한 비밀번호입니다. 새로 입력해주세요 ");
             }
