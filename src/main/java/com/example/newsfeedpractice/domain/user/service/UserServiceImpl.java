@@ -80,18 +80,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public UserLoginResponseDto userLogin(UserLoginRequestDto logintRequest) {
-
-        User user = userRepository.findByEmail(logintRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("없는 회원입니다."));
-
-        if (!user.getPassword().equals(logintRequest.getPassword())){
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
-        }
-
-        return new UserLoginResponseDto(user.getId(), user.getEmail(), user.getNickname() );
-    }
 
 
 }

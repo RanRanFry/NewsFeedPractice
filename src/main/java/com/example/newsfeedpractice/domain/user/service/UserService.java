@@ -10,7 +10,6 @@ public interface UserService {
 
      UserCreateResponseDto createUserAccount(UserCreateRequestDto userAccountRequestDto);
 
-     UserLoginResponseDto userLogin(UserLoginRequestDto logintRequest);
 
 
 }
