@@ -2,11 +2,11 @@ package com.example.newsfeedpractice.domain.user.controller;
 
 import com.example.newsfeedpractice.domain.user.dto.*;
 import com.example.newsfeedpractice.domain.user.service.UserService;
-import lombok.Getter;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import org.springframework.web.bind.annotation.*;
 
 
@@ -34,8 +34,25 @@ public class UserController {
     }
 
 
+    /**
+     * 유저 로그인
+     */
+    @PostMapping("/login")
+    public ResponseEntity<UserLoginResponseDto> userLogin(
+            HttpServletRequest request,
+            @RequestBody UserLoginRequestDto loginRequest){
+        UserLoginResponseDto userLoginResponseDto = userService.userLogin( request, loginRequest);
+        return new ResponseEntity<>(userLoginResponseDto, HttpStatus.OK) ;
+    }
 
-
+    /**
+     * 본인 프로필 조회
+     */
+    @GetMapping("/myProfile")
+    public ResponseEntity <MyProfileResponseDto> getMyProfile(HttpServletRequest request){
+        MyProfileResponseDto myProfile = userService.getMyProfile(request);
+        return new ResponseEntity<>(myProfile, HttpStatus.OK);
+    }
 
     /**
      * 유저 프로필 조회(타인)
@@ -49,17 +66,12 @@ public class UserController {
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
-    @GetMapping("/myProfile")
-    public ResponseEntity <MyProfileResponseDto> getMyProfile(@AuthenticationPrincipal Long id){
 
-        MyProfileResponseDto myProfile = userService.getMyProfile(id);
-        return new ResponseEntity<>(myProfile, HttpStatus.OK);
-    }
 
     /**
      * 수정
      */
-    @PatchMapping("/myProfile")
+
 
 
 }

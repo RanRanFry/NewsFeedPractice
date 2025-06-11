@@ -36,7 +36,7 @@ dependencies {
     implementation 'at.favre.lib:bcrypt:0.10.2'
 
     //스프링 시큐리티
-    implementation("org.springframework.boot:spring-boot-starter-security")
+//    implementation("org.springframework.boot:spring-boot-starter-security")
 
 
 }

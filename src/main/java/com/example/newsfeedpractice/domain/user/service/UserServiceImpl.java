@@ -4,12 +4,13 @@ import com.example.newsfeedpractice.domain.config.PasswordEncoder;
 import com.example.newsfeedpractice.domain.user.dto.*;
 import com.example.newsfeedpractice.domain.user.entity.User;
 import com.example.newsfeedpractice.domain.user.repository.UserRepostiory;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
+
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Builder //빌더 패턴 사용,  생성자 순서 상관없이 사용 가능
 @Service
@@ -17,8 +18,6 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepostiory userRepository;
-
-    //오류 발생, 튜터님한테 물어보기
     private final PasswordEncoder pwEncoder;
 
     //이메일 형식 체크 메서드
@@ -87,15 +86,67 @@ public class UserServiceImpl implements UserService {
         return new ProfileResponseDto(user.getNickname(), user.getProfileUrl());
     }
 
+
     @Override
-    public MyProfileResponseDto getMyProfile(Long id) {
-        User user = userRepository.findById(id)
+    public UserLoginResponseDto userLogin( HttpServletRequest request, UserLoginRequestDto logintRequest) {
+
+        //새로 접속하니까 기존 쿠키 삭제 로직
+        HttpSession oldSession = request.getSession();
+        oldSession.invalidate(); //구 세션 삭제
+        //이메일 검증
+        User user = userRepository.findByEmail(logintRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException("없는 회원입니다."));
+
+        //비밀번호 검증
+        String encodedPw = pwEncoder.encode(logintRequest.getPassword());
+
+        if (user.getPassword().equals(logintRequest.getPassword())){
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+
+
+        HttpSession session = request.getSession(true);
+        /**
+         * 세션 코드
+         * ToDo: 로그인 실패 시에도 세션 쿠키가 발급되는 문제 존재.
+         */
+
+
+        //1. 데이터 준비
+//        String userId = String.valueOf(user.getId());
+
+        Long userId =user.getId(); //인증
+        String  role = "loginUser";//인가
+
+
+
+        //2. 유저 정보 저장
+        session.setAttribute("userId", userId);
+        session.setAttribute("role", role);
+
+        //세션 유효시간 설정
+        session.setMaxInactiveInterval(300);
+
+        //세션 유효시간 조회
+        int maxInactiveInterval = session.getMaxInactiveInterval();
+
+        return new UserLoginResponseDto(user.getId(), user.getEmail(), user.getNickname() );
+    }
+
+
+    @Override
+    public MyProfileResponseDto getMyProfile(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Long myId = (Long) session.getAttribute("userId");
+        User user = userRepository.findById(myId)
                 .orElseThrow(() -> new RuntimeException("조회되지 않는 회원입니다."));
 
         MyProfileResponseDto myProfileResponseDto = new MyProfileResponseDto(user);
         return myProfileResponseDto;
 
     }
+
+
 
 
 }
