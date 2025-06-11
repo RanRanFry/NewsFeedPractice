@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService {
         //비밀번호 암호화
         String encodedPw = pwEncoder.encode(requestDto.getPassword());
         //ToDo : user 생성에 bulider 값으로 pw 넣기
+        //-> 문제해결 HttpSesssion을 사용하면 바로 발급된다. 서블렛리퀘스트로 대체
 
         User user = User.builder()
                         .userName(requestDto.getUserName())
