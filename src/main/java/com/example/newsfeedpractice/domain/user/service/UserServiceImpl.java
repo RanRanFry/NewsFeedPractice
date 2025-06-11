@@ -1,10 +1,7 @@
 package com.example.newsfeedpractice.domain.user.service;
 
 import com.example.newsfeedpractice.domain.config.PasswordEncoder;
-import com.example.newsfeedpractice.domain.user.dto.UserCreateRequestDto;
-import com.example.newsfeedpractice.domain.user.dto.UserCreateResponseDto;
-import com.example.newsfeedpractice.domain.user.dto.UserLoginRequestDto;
-import com.example.newsfeedpractice.domain.user.dto.UserLoginResponseDto;
+import com.example.newsfeedpractice.domain.user.dto.*;
 import com.example.newsfeedpractice.domain.user.entity.User;
 import com.example.newsfeedpractice.domain.user.repository.UserRepostiory;
 import lombok.Builder;
@@ -81,6 +78,14 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    //유저 프로필 조회
+    @Override
+    public ProfileResponseDto getProfile(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("없는 회원입니다."));
+
+        return new ProfileResponseDto(user.getNickname(), user.getProfileUrl());
+    }
 
 
 }

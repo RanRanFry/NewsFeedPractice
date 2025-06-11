@@ -1,9 +1,6 @@
 package com.example.newsfeedpractice.domain.user.controller;
 
-import com.example.newsfeedpractice.domain.user.dto.UserCreateRequestDto;
-import com.example.newsfeedpractice.domain.user.dto.UserCreateResponseDto;
-import com.example.newsfeedpractice.domain.user.dto.UserLoginRequestDto;
-import com.example.newsfeedpractice.domain.user.dto.UserLoginResponseDto;
+import com.example.newsfeedpractice.domain.user.dto.*;
 import com.example.newsfeedpractice.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,8 +34,15 @@ public class UserController {
 
 
     /**
-     * 유저 정보 수정
-     * 닉네임, 프로필 이미지, 비밀번호
+     * 유저 프로필 조회(타인)
+     * 민감 정보 표시 제한
+     * 민감 정보가 아닌 것  : 닉네임, 프로필 URL
+     * ToDo : 프로필 조회
      */
+    @GetMapping("/{id}")
+    public ResponseEntity <ProfileResponseDto>getProfile(@PathVariable Long id){
+        ProfileResponseDto profile = userService.getProfile(id);
+        return new ResponseEntity<>(profile, HttpStatus.OK);
+    }
 
 }
