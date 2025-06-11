@@ -14,6 +14,8 @@ public class MyProfileResponseDto {
 
     private String profileUrl;
 
+    private String password;
+
     private String nickname;
 
     private String phoneNumber;
@@ -21,6 +23,7 @@ public class MyProfileResponseDto {
     public MyProfileResponseDto(User user){
         this.id = user.getId();
         this.email = user.getEmail();
+        this.password = user.getPassword();
         this.profileUrl = user.getProfileUrl();
         this.nickname = user.getNickname();
         this.phoneNumber = user.getPhoneNumber();

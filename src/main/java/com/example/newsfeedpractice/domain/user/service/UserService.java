@@ -16,4 +16,6 @@ public interface UserService {
 
      MyProfileResponseDto getMyProfile(HttpServletRequest request);
 
+     MyProfileResponseDto changeMyProfile(HttpServletRequest request , ChangeInfoRequestDto changeRequest);
+
 }

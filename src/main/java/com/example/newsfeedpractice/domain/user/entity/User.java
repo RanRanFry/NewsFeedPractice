@@ -65,6 +65,22 @@ public class User {
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
+    public void changeProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void changePhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
 
 

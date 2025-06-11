@@ -71,6 +71,14 @@ public class UserController {
     /**
      * 수정
      */
+    @PatchMapping("/myProfile")
+    public ResponseEntity <MyProfileResponseDto> changeInfo(
+            HttpServletRequest request,
+            @RequestBody ChangeInfoRequestDto changeRequest){
+        MyProfileResponseDto newMyProfile = userService.changeMyProfile(request, changeRequest);
+        return new ResponseEntity<>(newMyProfile, HttpStatus.OK);
+    }
+
 
 
 

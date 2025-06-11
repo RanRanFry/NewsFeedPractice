@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserCreateResponseDto createUserAccount(UserCreateRequestDto requestDto) {
+    public UserCreateResponseDto createUserAccount( UserCreateRequestDto requestDto) {
 
         //이메일 형식 검사
         String email= requestDto.getEmail();
@@ -97,13 +97,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(logintRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("없는 회원입니다."));
 
-        //비밀번호 검증
-        String encodedPw = pwEncoder.encode(logintRequest.getPassword());
-
         if (user.getPassword().equals(logintRequest.getPassword())){
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
-
 
         HttpSession session = request.getSession(true);
         /**
@@ -146,7 +142,50 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public MyProfileResponseDto changeMyProfile(HttpServletRequest request, ChangeInfoRequestDto changeRequest) {
 
+        HttpSession session = request.getSession();
+        Long myId = (Long) session.getAttribute("userId");
+        User user = userRepository.findById(myId)
+                .orElseThrow(() -> new RuntimeException("조회되지 않는 회원입니다."));
+
+        String newPassword = changeRequest.getPassword();
+        String newNickname = changeRequest.getNickname();
+        String newProfileUrl = changeRequest.getProfileUrl();
+        String newPhoneNumber = changeRequest.getPhoneNumber();
+
+        if (newPassword != null && !newPassword.isBlank() ){
+            if(user.getPassword().equals(changeRequest.getPassword())){
+                throw new IllegalArgumentException("동일한 비밀번호입니다. 새로 입력해주세요 ");
+            }
+
+            if(!isValidPw(changeRequest.getPassword())){
+                throw new IllegalArgumentException("지원되지 않는 비밀번호 양식입니다.");
+            }
+            user.changePassword(newPassword);
+        }
+
+        //닉네임 변경
+        if(newNickname != null && !newNickname.isBlank()){
+            user.changeNickname(newNickname);
+        }
+
+       //프로필 이미지 변경 URL
+        if(newProfileUrl != null && !newProfileUrl.isBlank()){
+            user.changeProfileUrl(newProfileUrl);
+        }
+
+        //전화번호 변경
+        if(newPhoneNumber != null && !newPhoneNumber.isBlank()){
+            user.changePhoneNumber(newPhoneNumber);
+        }
+        userRepository.save(user);
+
+        MyProfileResponseDto changeProfileResponse = new MyProfileResponseDto(user);
+
+        return changeProfileResponse;
+    }
 
 
 }
