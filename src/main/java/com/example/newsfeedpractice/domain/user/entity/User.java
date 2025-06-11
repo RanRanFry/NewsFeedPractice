@@ -26,7 +26,7 @@ public class User {
     @Column(nullable = false, name = "email", unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false, length =255)
     private String password;
 
     @Column(name = "profile_image_url")
