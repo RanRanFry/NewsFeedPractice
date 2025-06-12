@@ -38,4 +38,16 @@ public class Post extends BaseEntity {
         this.postImageUrl = postImageUrl;
 
     }
+
+    public void changePostTitle(String postTitle) {
+        this.postTitle = postTitle;
+    }
+
+    public void changePostContent(String postContent) {
+        this.postContent = postContent;
+    }
+
+    public void changePostImageUrl(String postImageUrl) {
+        this.postImageUrl = postImageUrl;
+    }
 }

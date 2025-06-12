@@ -67,5 +67,54 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    /**
+     * 게시글 수정
+     */
+    @Override
+    public PostCreateResponseDto updatePost(Long id, CreatePostRequestDTO updatePostRequest, HttpServletRequest request) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("조회되지 않는 글입니다."));
+
+        //로그인한 아이디
+        Long userId = (Long) request.getSession().getAttribute("userId");
+
+        //해당 번호 글의 작성자 아이디
+        Long ownerId = post.getUser().getId();
+
+        //검증 : 로그인한 사람과 글의 작성자가 일치하는지
+        if(!userId.equals(ownerId)){
+            throw new IllegalArgumentException("본인 글만 수정 가능합니다.");
+        }
+
+        String newPostTitle = updatePostRequest.getPostTitle();
+        if(updatePostRequest.getPostTitle() != null && !updatePostRequest.getPostTitle().equals("") ){
+            post.changePostTitle(newPostTitle);
+        }
+
+        String newPostContent = updatePostRequest.getPostContent();
+        if(updatePostRequest.getPostContent() != null && !updatePostRequest.getPostContent().equals("") ){
+            post.changePostContent(newPostContent);
+        }
+
+        //이미지는 빠져도 되므로 null 값이 되어도 상관없다.
+        String newPostImageUrl = updatePostRequest.getPostImageUrl();
+        post.changePostTitle(newPostImageUrl);
+
+        Post updatedPost = Post.builder()
+                .user(post.getUser())
+                .postTitle(post.getPostTitle())
+                .postContent(post.getPostContent())
+                .postImageUrl(post.getPostImageUrl())
+                .build();
+
+        Post savedPost = postRepository.save(updatedPost);
+
+        PostCreateResponseDto updatedResponseDto = new PostCreateResponseDto(savedPost);
+        return updatedResponseDto;
+    }
+
+
+
+
 
 }

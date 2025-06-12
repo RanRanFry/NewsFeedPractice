@@ -42,4 +42,16 @@ public class PostController {
         Page<Post> postList = postService.getPostList(pageRequest);
         return new ResponseEntity <> (postList,HttpStatus.OK);
     }
+
+    /**
+     * 게시글 수정
+     *
+     */
+    @PatchMapping("/{id}")
+    public ResponseEntity <PostCreateResponseDto> updatePost(@PathVariable Long id,
+                           @RequestBody CreatePostRequestDTO updatePostRequest,
+                           HttpServletRequest request){
+        PostCreateResponseDto postCreateResponseDto = postService.updatePost(id, updatePostRequest, request);
+        return new ResponseEntity<> (postCreateResponseDto, HttpStatus.OK);
+    }
 }

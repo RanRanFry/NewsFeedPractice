@@ -12,4 +12,6 @@ public interface PostService {
 
     Page<Post> getPostList(PageNumberGetRequestDto pageRequest);
 
+    PostCreateResponseDto updatePost(Long id,CreatePostRequestDTO updatePostRequest, HttpServletRequest request);
+
 }
