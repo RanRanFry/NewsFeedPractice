@@ -58,9 +58,8 @@ public class PostServiceImpl implements PostService {
     public Page <GetPostResponseDto>  getPostList(PageNumberGetRequestDto request)
     {
         int pageNumber =  request.getPageNumber();
-        Pageable pageable = PageRequest.of(pageNumber, 5, Sort.by("createdAt"));
+        Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Post> postPage = postRepository.findAll(pageable);
-
         Page <GetPostResponseDto> dtoPage = postPage.map(GetPostResponseDto::new);
 
 
