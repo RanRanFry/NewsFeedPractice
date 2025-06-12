@@ -3,7 +3,7 @@ package com.example.newsfeedpractice.domain.user.service;
 import com.example.newsfeedpractice.domain.config.PasswordEncoder;
 import com.example.newsfeedpractice.domain.user.dto.*;
 import com.example.newsfeedpractice.domain.user.entity.User;
-import com.example.newsfeedpractice.domain.user.repository.UserRepostiory;
+import com.example.newsfeedpractice.domain.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.Builder;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepostiory userRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder pwEncoder;
 
     //이메일 형식 체크 메서드

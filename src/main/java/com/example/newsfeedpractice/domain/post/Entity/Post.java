@@ -1,17 +1,18 @@
 package com.example.newsfeedpractice.domain.post.Entity;
 
+import com.example.newsfeedpractice.domain.common.BaseEntity;
 import com.example.newsfeedpractice.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
 @Entity
-public class Posts {
+@Table(name = "posts")
+public class Post extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -28,15 +29,13 @@ public class Posts {
     @Column(name ="post_image_url")
     private String postImageUrl;
 
-    @Column(name ="created_at", nullable =false)
-    private LocalDateTime createdAt;
 
-    @Column(name ="modified_at", nullable = false)
-    private LocalDateTime modifiedAt;
-
-    public Posts(User user, String postTitle, String postContent){
+    @Builder
+    public Post(User user, String postTitle, String postContent, String postImageUrl){
         this.user = user;
         this.postTitle = postTitle;
         this.postContent = postContent;
+        this.postImageUrl = postImageUrl;
+
     }
 }
