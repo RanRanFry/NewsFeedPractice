@@ -1,10 +1,7 @@
 package com.example.newsfeedpractice.domain.post.service;
 
 import com.example.newsfeedpractice.domain.post.Entity.Post;
-import com.example.newsfeedpractice.domain.post.dto.GetPostListResponseDto;
-import com.example.newsfeedpractice.domain.post.dto.PageNumberGetRequestDto;
-import com.example.newsfeedpractice.domain.post.dto.PostCreateResponseDto;
-import com.example.newsfeedpractice.domain.post.dto.CreatePostRequestDTO;
+import com.example.newsfeedpractice.domain.post.dto.*;
 
 import com.example.newsfeedpractice.domain.post.repository.PostRepository;
 import com.example.newsfeedpractice.domain.user.entity.User;
@@ -58,13 +55,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page <Post> getPostList(PageNumberGetRequestDto request)
+    public Page <GetPostResponseDto>  getPostList(PageNumberGetRequestDto request)
     {
         int pageNumber =  request.getPageNumber();
-        List<Post> postList = postRepository.findAll();
         Pageable pageable = PageRequest.of(pageNumber, 5, Sort.by("createdAt"));
-        return postRepository.findAll(pageable);
+        Page<Post> postPage = postRepository.findAll(pageable);
+
+        Page <GetPostResponseDto> dtoPage = postPage.map(GetPostResponseDto::new);
+
+
+        return dtoPage;
         //ToDo: 출력시 user 정보 모두 출력되는 문제 발생 -> 수정필요
+
+
 
     }
 

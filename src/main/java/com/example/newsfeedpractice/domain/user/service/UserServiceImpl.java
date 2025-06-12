@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
         HttpSession session = request.getSession(true);
         /**
          * 세션 코드
-         * ToDo: 로그인 실패 시에도 세션 쿠키가 발급되는 문제 존재.
+         *
          */
 
 
@@ -168,7 +168,9 @@ public class UserServiceImpl implements UserService {
             if(!isValidPw(changeRequest.getPassword())){
                 throw new IllegalArgumentException("지원되지 않는 비밀번호 양식입니다.");
             }
-            user.changePassword(newPassword);
+            String newEncodedPw = pwEncoder.encode(newPassword);
+            user.changePassword(newEncodedPw);
+
         }
 
         //닉네임 변경

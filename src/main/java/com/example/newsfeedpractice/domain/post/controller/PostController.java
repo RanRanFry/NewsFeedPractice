@@ -1,6 +1,7 @@
 package com.example.newsfeedpractice.domain.post.controller;
 
 import com.example.newsfeedpractice.domain.post.Entity.Post;
+import com.example.newsfeedpractice.domain.post.dto.GetPostResponseDto;
 import com.example.newsfeedpractice.domain.post.dto.PageNumberGetRequestDto;
 import com.example.newsfeedpractice.domain.post.dto.PostCreateResponseDto;
 import com.example.newsfeedpractice.domain.post.dto.CreatePostRequestDTO;
@@ -38,8 +39,8 @@ public class PostController {
      * 게시글 전체 조회
      */
     @GetMapping
-    public ResponseEntity<Page <Post>> getPostList(@RequestBody PageNumberGetRequestDto pageRequest){
-        Page<Post> postList = postService.getPostList(pageRequest);
+    public ResponseEntity<Page <GetPostResponseDto>> getPostList(@RequestBody PageNumberGetRequestDto pageRequest){
+        Page<GetPostResponseDto> postList = postService.getPostList(pageRequest);
         return new ResponseEntity <> (postList,HttpStatus.OK);
     }
 
