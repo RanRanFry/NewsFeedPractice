@@ -14,4 +14,7 @@ public interface PostService {
 
     PostCreateResponseDto updatePost(Long id,CreatePostRequestDTO updatePostRequest, HttpServletRequest request);
 
+    void deletePost(Long id, HttpServletRequest request);
+
+
 }

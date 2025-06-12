@@ -54,4 +54,11 @@ public class PostController {
         PostCreateResponseDto postCreateResponseDto = postService.updatePost(id, updatePostRequest, request);
         return new ResponseEntity<> (postCreateResponseDto, HttpStatus.OK);
     }
+
+
+    @PatchMapping("/{id}")
+    public void deletePost(@PathVariable Long id, HttpServletRequest request){
+        PostCreateResponseDto postCreateResponseDto = postService.updatePost(id,  request);
+
+    }
 }

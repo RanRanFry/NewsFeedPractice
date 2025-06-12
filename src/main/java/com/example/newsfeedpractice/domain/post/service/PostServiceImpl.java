@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -113,8 +114,30 @@ public class PostServiceImpl implements PostService {
         return updatedResponseDto;
     }
 
+    /**
+     * 게시글 삭제
+     * @param id
+     * @param request
+     */
+    @Override
+    public void deletePost(Long id, HttpServletRequest request) {
+        Post deletePost = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("조회되지 않는 글입니다."));
 
+        //로그인한 아이디
+        Long userId = (Long) request.getSession().getAttribute("userId");
 
+        //해당 번호 글의 작성자 아이디
+        Long ownerId = post.getUser().getId();
+
+        //검증 : 로그인한 사람과 글의 작성자가 일치하는지
+        if(!userId.equals(ownerId)){
+            throw new IllegalArgumentException("본인 글만 삭제 가능합니다.");
+        }
+
+        //삭제할 post entity;
+        postRepository.delete(deletePost);
+    }
 
 
 }
