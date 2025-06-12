@@ -99,16 +99,9 @@ public class PostServiceImpl implements PostService {
 
         //이미지는 빠져도 되므로 null 값이 되어도 상관없다.
         String newPostImageUrl = updatePostRequest.getPostImageUrl();
-        post.changePostTitle(newPostImageUrl);
+        post.changePostImageUrl(newPostImageUrl);
 
-        Post updatedPost = Post.builder()
-                .user(post.getUser())
-                .postTitle(post.getPostTitle())
-                .postContent(post.getPostContent())
-                .postImageUrl(post.getPostImageUrl())
-                .build();
-
-        Post savedPost = postRepository.save(updatedPost);
+        Post savedPost = postRepository.save(post);
 
         PostCreateResponseDto updatedResponseDto = new PostCreateResponseDto(savedPost);
         return updatedResponseDto;
@@ -128,7 +121,7 @@ public class PostServiceImpl implements PostService {
         Long userId = (Long) request.getSession().getAttribute("userId");
 
         //해당 번호 글의 작성자 아이디
-        Long ownerId = post.getUser().getId();
+        Long ownerId = deletePost.getUser().getId();
 
         //검증 : 로그인한 사람과 글의 작성자가 일치하는지
         if(!userId.equals(ownerId)){

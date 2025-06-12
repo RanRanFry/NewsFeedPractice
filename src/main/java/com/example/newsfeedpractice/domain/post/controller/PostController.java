@@ -56,9 +56,8 @@ public class PostController {
     }
 
 
-    @PatchMapping("/{id}")
+    @DeleteMapping("/{id}")
     public void deletePost(@PathVariable Long id, HttpServletRequest request){
-        PostCreateResponseDto postCreateResponseDto = postService.updatePost(id,  request);
-
+        postService.deletePost(id,  request);
     }
 }

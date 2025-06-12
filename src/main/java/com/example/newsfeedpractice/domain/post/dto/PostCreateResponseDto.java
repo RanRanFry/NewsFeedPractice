@@ -27,5 +27,7 @@ public class PostCreateResponseDto {
         this.postImageUrl = post.getPostImageUrl();
         this.nickname = post.getUser().getNickname();
         this.profileUrl = post.getUser().getProfileUrl();
+        this.createdAt = post.getCreatedAt();
+        this.modifiedAt = post.getModifiedAt();
     }
 }
