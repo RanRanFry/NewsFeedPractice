@@ -1,8 +1,10 @@
 package com.example.newsfeedpractice.domain.post.service;
 
 import com.example.newsfeedpractice.domain.post.Entity.Post;
+import com.example.newsfeedpractice.domain.post.dto.GetPostListResponseDto;
+import com.example.newsfeedpractice.domain.post.dto.PageNumberGetRequestDto;
 import com.example.newsfeedpractice.domain.post.dto.PostCreateResponseDto;
-import com.example.newsfeedpractice.domain.post.dto.createPostRequestDTO;
+import com.example.newsfeedpractice.domain.post.dto.CreatePostRequestDTO;
 
 import com.example.newsfeedpractice.domain.post.repository.PostRepository;
 import com.example.newsfeedpractice.domain.user.entity.User;
@@ -10,7 +12,13 @@ import com.example.newsfeedpractice.domain.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -19,7 +27,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     @Override
-    public PostCreateResponseDto createPost(createPostRequestDTO createRequest, HttpServletRequest request) {
+    public PostCreateResponseDto createPost(CreatePostRequestDTO createRequest, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
         Long userId = (Long) session.getAttribute("userId");
@@ -39,12 +47,23 @@ public class PostServiceImpl implements PostService {
                 .postTitle(newPost.getPostTitle())
                 .postContent(newPost.getPostContent())
                 .postImageUrl((newPost.getPostImageUrl()))
-                .nickname(newPost.getUser().getNickname())
+                .nickname(newPost.getUser().getNickname())//N
                 .profileUrl(newPost.getUser().getProfileUrl())
                 .createdAt(newPost.getCreatedAt())
                 .modifiedAt(newPost.getModifiedAt())
                 .build();
         return postCreateResponse;
+
+    }
+
+    @Override
+    public Page <Post> getPostList(PageNumberGetRequestDto request)
+    {
+        int pageNumber =  request.getPageNumber();
+        List<Post> postList = postRepository.findAll();
+        Pageable pageable = PageRequest.of(pageNumber, 5, Sort.by("createdAt"));
+        return postRepository.findAll(pageable);
+        //ToDo: 출력시 user 정보 모두 출력되는 문제 발생 -> 수정필요
 
     }
 

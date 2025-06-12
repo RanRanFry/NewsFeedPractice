@@ -1,9 +1,15 @@
 package com.example.newsfeedpractice.domain.post.service;
 
+import com.example.newsfeedpractice.domain.post.Entity.Post;
+import com.example.newsfeedpractice.domain.post.dto.PageNumberGetRequestDto;
 import com.example.newsfeedpractice.domain.post.dto.PostCreateResponseDto;
-import com.example.newsfeedpractice.domain.post.dto.createPostRequestDTO;
+import com.example.newsfeedpractice.domain.post.dto.CreatePostRequestDTO;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Page;
 
 public interface PostService {
-    PostCreateResponseDto createPost(createPostRequestDTO createRequest, HttpServletRequest request);
+    PostCreateResponseDto createPost(CreatePostRequestDTO createRequest, HttpServletRequest request);
+
+    Page<Post> getPostList(PageNumberGetRequestDto pageRequest);
+
 }

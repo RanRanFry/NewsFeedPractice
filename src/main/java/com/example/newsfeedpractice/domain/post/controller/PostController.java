@@ -1,16 +1,19 @@
 package com.example.newsfeedpractice.domain.post.controller;
 
+import com.example.newsfeedpractice.domain.post.Entity.Post;
+import com.example.newsfeedpractice.domain.post.dto.PageNumberGetRequestDto;
 import com.example.newsfeedpractice.domain.post.dto.PostCreateResponseDto;
-import com.example.newsfeedpractice.domain.post.dto.createPostRequestDTO;
+import com.example.newsfeedpractice.domain.post.dto.CreatePostRequestDTO;
 import com.example.newsfeedpractice.domain.post.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -25,13 +28,18 @@ public class PostController {
      */
     @PostMapping("/create")
     public ResponseEntity <PostCreateResponseDto> createPost(
-            @RequestBody createPostRequestDTO createRequest,
+            @RequestBody CreatePostRequestDTO createRequest,
             HttpServletRequest request){
         PostCreateResponseDto newPost = postService.createPost(createRequest, request);
         return new ResponseEntity<>(newPost,HttpStatus.OK);
     }
 
     /**
-     * 게시글 조회
+     * 게시글 전체 조회
      */
+    @GetMapping
+    public ResponseEntity<Page <Post>> getPostList(@RequestBody PageNumberGetRequestDto pageRequest){
+        Page<Post> postList = postService.getPostList(pageRequest);
+        return new ResponseEntity <> (postList,HttpStatus.OK);
+    }
 }
