@@ -7,6 +7,8 @@ import com.example.newsfeedpractice.domain.post.dto.createPostRequestDTO;
 import com.example.newsfeedpractice.domain.post.repository.PostRepository;
 import com.example.newsfeedpractice.domain.user.entity.User;
 import com.example.newsfeedpractice.domain.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +19,12 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     @Override
-    public PostCreateResponseDto createPost(createPostRequestDTO createRequest) {
+    public PostCreateResponseDto createPost(createPostRequestDTO createRequest, HttpServletRequest request) {
 
-        User loginUser = userRepository.findById(6L)
+        HttpSession session = request.getSession();
+        Long userId = (Long) session.getAttribute("userId");
+
+        User loginUser = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("로그인한 회원만 작성할 수 있습니다."));
         Post newPost = Post.builder()
                 .user(loginUser)
